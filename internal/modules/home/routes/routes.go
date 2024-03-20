@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+//set route
 func Routes(router *gin.Engine)  {
-		//set route
 		router.GET("/", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
 				"message":  "pong",
