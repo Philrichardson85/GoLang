@@ -16,8 +16,9 @@ func Serve() {
 	static.LoadStatic(routing.GetRouter())
 
 	html.LoadHTML(routing.GetRouter())
-
+ 
 	routes.Routes(routing.GetRouter())
 	
 	routing.Serve()
+	
 }
