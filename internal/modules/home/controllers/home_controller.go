@@ -2,6 +2,7 @@ package controllers
 
 import (
 	ArticleService "demoBlog/internal/modules/article/services"
+	"demoBlog/pkg/html"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,11 +19,8 @@ func New() *Controller{
 }
 
 func (controller*Controller) Index( c *gin.Context) {
-	// html.Render(c, http.StatusOK, "modules/home/html/home", gin.H{
-	// 	"title": "Phil's Home website",
-	// })
-
-	c.JSON(http.StatusOK, gin.H{
+	html.Render(c, http.StatusOK, "modules/home/html/home", gin.H{
+		"title": "Phil's Home website",
 		"featured": controller.articleService.GetFeaturedArticles(),
 		"stories": controller.articleService.GetStoriesArticles(),
 	})
