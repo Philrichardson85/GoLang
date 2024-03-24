@@ -1,7 +1,6 @@
 package bootstrap
 
 import (
-	"demoBlog/internal/modules/home/routes"
 	"demoBlog/pkg/config"
 	"demoBlog/pkg/database"
 	"demoBlog/pkg/html"
@@ -19,9 +18,9 @@ func Serve() {
 	static.LoadStatic(routing.GetRouter())
 
 	html.LoadHTML(routing.GetRouter())
- 
-	routes.Routes(routing.GetRouter())
-	
+
+	routing.RegisterRoutes()
+ 	
 	routing.Serve()
 	
 }
