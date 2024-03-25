@@ -1,0 +1,9 @@
+package repositories
+
+import (
+	userModel "demoBlog/internal/modules/user/models"
+)
+
+type UserRepositoryInterface interface {
+	Create(user userModel.User) userModel.User
+}
