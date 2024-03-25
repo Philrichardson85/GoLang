@@ -10,6 +10,7 @@ import (
 	"demoBlog/pkg/html"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,12 +49,27 @@ func (controller *Controller) HandleRegister( c *gin.Context) {
 		return
 	}
 
+	if controller.userService.CheckUserExists(request.Email) {
+		errors.Init()
+		errors.Add("Email", "Email Address already exists")
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+		
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/register")
+		return
+	}
+
 	user, err := controller.userService.Create(request)
 
 	if err != nil {
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
+
+	sessions.Set(c, "auth", strconv.Itoa(int(user.ID)))
 
 	log.Printf("the user created successfully with a name %s \n", user.Name)
 	c.Redirect(http.StatusFound, "/")
