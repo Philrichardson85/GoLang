@@ -2,6 +2,7 @@ package controllers
 
 import (
 	ArticleService "demoBlog/internal/modules/article/services"
+	"demoBlog/pkg/html"
 	"net/http"
 	"strconv"
 
@@ -21,15 +22,16 @@ func New() *Controller{
 func (controller *Controller) Show( c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 if err != nil {
-	c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "error converting the is"})
+	html.Render(c, http.StatusInternalServerError, "templates/errors/html/500", gin.H{"title": "Server error", "message": "error converting the is"})
 	return
 }
 
 article, err := controller.articleService.Find(id)
 if err != nil {
-	c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+	html.Render(c, http.StatusNotFound, "templates/errors/html/404", gin.H{"title": "Page not found", "message": err.Error()})
 	return
 }
 
-	c.JSON(http.StatusOK, gin.H{"article": article})
+html.Render(c, http.StatusOK, "modules/articles/html/show", gin.H{"title": "Show article", "article": article})
+
 }
