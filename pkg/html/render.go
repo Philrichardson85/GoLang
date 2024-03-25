@@ -7,6 +7,6 @@ import (
 )
 
 func Render(c *gin.Context, html_code int, template_folder string, data gin.H)  {
-	data = view.WithGlobalData(data)
+	data = view.WithGlobalData(c, data)
 	c.HTML(html_code, template_folder, data)
 }
