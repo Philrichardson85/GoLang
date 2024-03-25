@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"demoBlog/internal/modules/user/requests/auth"
 	"demoBlog/pkg/html"
 	"net/http"
 
@@ -20,5 +21,11 @@ func (controller *Controller) Register( c *gin.Context) {
 }
 
 func (controller *Controller) HandleRegister( c *gin.Context) {
+	var request auth.RegisterRequest
+		if err := c.ShouldBind(&request); err != nil {
+			c.Redirect(http.StatusFound, "/register")
+			return
+		}
+
 	c.JSON(http.StatusOK, gin.H{"message": "Register done..."})
 }
