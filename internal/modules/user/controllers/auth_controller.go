@@ -3,6 +3,7 @@ package controllers
 import (
 	"demoBlog/internal/modules/user/requests/auth"
 	UserService "demoBlog/internal/modules/user/services"
+	"demoBlog/pkg/old"
 	"demoBlog/pkg/sessions"
 	"demoBlog/pkg/converters"
 	"demoBlog/pkg/errors"
@@ -38,6 +39,11 @@ func (controller *Controller) HandleRegister( c *gin.Context) {
 
 		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
 		
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old",converters.UrlValuesToString(old.Get()))
+
+
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
