@@ -27,3 +27,10 @@ func (articleRepository *ArticleRepository) Find(id int) ArticleModel.Article  {
 	articleRepository.DB.Joins("User").First(&article, id)
 	return article
 }
+
+func (articleRepository *ArticleRepository) Create(article ArticleModel.Article) ArticleModel.Article {
+	var newArticle ArticleModel.Article
+	articleRepository.DB.Create(&article).Scan(&newArticle)
+
+	return newArticle
+}

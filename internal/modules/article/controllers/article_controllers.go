@@ -1,8 +1,15 @@
 package controllers
 
 import (
+	"demoBlog/internal/modules/article/requests/articles"
 	ArticleService "demoBlog/internal/modules/article/services"
+	"demoBlog/internal/modules/user/helpers"
+	"demoBlog/pkg/converters"
+	"demoBlog/pkg/errors"
 	"demoBlog/pkg/html"
+	"demoBlog/pkg/old"
+	"demoBlog/pkg/sessions"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -42,5 +49,31 @@ func (controller *Controller) Create( c *gin.Context) {
 
 func (controller *Controller) Store( c *gin.Context) {
 
-	c.JSON(http.StatusOK, gin.H{"message": "Article created .."})
+	var request articles.StoreRequest
+
+	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+		
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old",converters.UrlValuesToString(old.Get()))
+
+
+		c.Redirect(http.StatusFound, "/articles/create")
+		return
+	}
+
+	user := helpers.Auth(c)
+
+	article, err := controller.articleService.StoreAsUser(request, user)
+
+	if err != nil {
+		c.Redirect(http.StatusFound, "/articles/create")
+		return
+	}
+
+	c.Redirect(http.StatusFound, fmt.Sprintf("/articles/%d", article.ID))
 }
