@@ -1,8 +1,9 @@
 package routes
 
 import (
-	articleCtrl "demoBlog/internal/modules/article/controllers"
 	"demoBlog/internal/middlewares"
+	articleCtrl "demoBlog/internal/modules/article/controllers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,5 +18,6 @@ func Routes(router *gin.Engine)  {
 	authGroup.Use(middlewares.IsAuth()) 
 	{
 		authGroup.GET("/create", articlesController.Create)
+		authGroup.GET("/store", articlesController.Store) 
 	}
 }
