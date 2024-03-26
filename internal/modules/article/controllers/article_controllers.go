@@ -35,3 +35,8 @@ if err != nil {
 html.Render(c, http.StatusOK, "modules/articles/html/show", gin.H{"title": "Show article", "article": article})
 
 }
+
+func (controller *Controller) Create( c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{"message": "Hello world .."})
+}
